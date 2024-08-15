@@ -1,0 +1,1 @@
+//Global interface and types
