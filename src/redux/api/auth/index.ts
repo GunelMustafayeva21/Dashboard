@@ -14,36 +14,34 @@ export const authApi= createApi({
             return {
                 url:'auth/admin/token',
                 method:'POST',
-                body:data
+                data
             }
          },
          
         async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-    try {
-        console.log('Query started with args:', _args);
-        const { data } = await queryFulfilled;
-        console.log('Query fulfilled with data:', data);
-        dispatch(setToken(data));
-        dispatch(authApi.endpoints.getUser.initiate(null));
-    } catch (error) {
-        console.error('Login User Catch', error);
-    }
-}
+            try {
+                console.log('Query started with args:', _args);
+                const { data } = await queryFulfilled;
+                console.log('Query fulfilled with data:', data);
+                dispatch(setToken(data));
+                dispatch(authApi.endpoints.getUser.initiate(null));
+            } catch (error) {
+                console.error('Login User Catch', error);
+            }
+        }
 
        }),
        getUser: builder.query({
           query(){
             return {
                 url:'auth/profile',
-                method:'GET'
-                
+                method:'GET'                
             }
           },
           async onQueryStarted(_args, {dispatch, queryFulfilled}){
             try{
                 const { data } = await  queryFulfilled
-                dispatch(setUser(data))
-                
+                dispatch(setUser(data))                
             }
             catch(error){
                 console.log("Get User Catch",error)

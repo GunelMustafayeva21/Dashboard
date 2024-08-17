@@ -10,11 +10,10 @@ let initialState:ILogin={
     lastName:"",
     email:""
    },
-   tokens:{
-    token:"",
-    refreshToken:"",
-    expiresAt:""
-   } 
+   token:"",
+   refreshToken:"",
+   expiresAt:""
+
 };
 
 export const UserSlice =createSlice({
@@ -22,7 +21,13 @@ export const UserSlice =createSlice({
     initialState,
     reducers:{
         setToken:(state:ILogin, action:PayloadAction<IToken>)=>{
-           state.tokens=action.payload
+         const {token,expiresAt,refreshToken} = action.payload;
+           return {
+            ...state,
+            token,
+            expiresAt,
+            refreshToken
+           }
         },
         setUser:(state:ILogin, action:PayloadAction<IUser>)=>{
            state.user = action.payload;

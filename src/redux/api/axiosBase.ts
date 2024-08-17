@@ -2,16 +2,19 @@ import { BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
-import { setToken } from "@/redux/feature/User/UserSlice";
-import { RootState } from "../store";
-import { revertAll } from "./constants";
+import { revertAll } from "@/redux/api/constants";
 import { ErrorCode } from "@/shared/constants/StatusCodes";
-const baseURL = `${import.meta.env.VITE_BASE_URL}/`;
+import { RootState } from "../store";
+import { setToken } from "@/redux/feature/User/UserSlice";
+
+const baseURL = `${import.meta.env.VITE_BASE_URL}`;
+
 const errorNotifier = (message?: string) => {
     toast.error(message, {
-        position: "bottom-right",
+        position: "top-right",
     });
 };
+
 interface IAxiosBaseQuery {
     baseUrl?: string;
     headers?: (
@@ -19,6 +22,7 @@ interface IAxiosBaseQuery {
         store: { getState: any; signal: any }
     ) => { [key: string]: string };
 }
+
 export interface IBaseQuery {
     url: string;
     params?: AxiosRequestConfig["params"];
@@ -30,6 +34,8 @@ export interface IBaseQuery {
         data: any;
     };
 }
+
+
 export const axiosBaseQuery = ({
     baseUrl = "",
     headers,
@@ -69,6 +75,7 @@ export const axiosBaseQuery = ({
         }
     };
 };
+
 export const APIBaseQueryInterceptor = axiosBaseQuery({
     baseUrl: baseURL,
     headers: (headers, { getState }) => {
@@ -82,21 +89,23 @@ export const APIBaseQueryInterceptor = axiosBaseQuery({
         return headers;
     },
 });
+
 export const APIBaseQuery: BaseQueryFn<IBaseQuery, unknown, unknown> = async (
     args,
     api,
     extraOptions
 ) => {
     let result = await APIBaseQueryInterceptor(args, api, extraOptions);
+
     if (
         result.error &&
-        result.error.status === ErrorCode.UNAUTHORIZED //401
-        // accesstToken refreshToken expire 1gun
+        result.error.status === ErrorCode.UNAUTHORIZED
     ) {
         const state: any = api;
         const userState: any = state.getState() as RootState;
-        const { user } = userState;
-        const { refreshToken } = user;
+        const { auth } = userState;
+        const { refreshToken } = auth;
+
         const refreshResult = await APIBaseQueryInterceptor(
             { url: "auth/refreshToken", method: "POST", data: { refreshToken } },
             api,
@@ -109,6 +118,7 @@ export const APIBaseQuery: BaseQueryFn<IBaseQuery, unknown, unknown> = async (
             result = await APIBaseQueryInterceptor(args, api, extraOptions);
         } else {
             errorNotifier("401 UNAUTHORIZED");
+
             state.dispatch(revertAll());
         }
     }
@@ -122,7 +132,7 @@ export const APIBaseQuery: BaseQueryFn<IBaseQuery, unknown, unknown> = async (
             result.error?.data?.error ||
             "Xəta baş verdi"
         );
+
     }
     return result;
 };
-

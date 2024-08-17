@@ -1,6 +1,8 @@
 export interface ILogin{
     user:IUser | null,
-    tokens:IToken
+    token:string,
+    refreshToken:string,
+    expiresAt:string
 }
 export interface IUser{
     id:string,
