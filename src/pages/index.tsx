@@ -13,7 +13,7 @@ import { useAppSelector } from "@/redux/store";
 const Router: React.FC = () => {
   const { user } = useAppSelector((state) => state.user);
   let youHaveAccount = !Object.values(user || {}).some((value) => value == "");
-  console.log(youHaveAccount);
+ 
 
   return (
     <>

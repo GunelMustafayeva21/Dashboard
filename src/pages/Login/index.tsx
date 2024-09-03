@@ -6,6 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import RenderIf from "@/shared/components/RenderIf";
 import { useLoginUserMutation } from "@/redux/api/auth";
 import { IAuth } from "@/redux/api/auth/types";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const backgroundUrl="https://4kwallpapers.com/images/wallpapers/dark-background-abstract-background-network-3d-background-7680x4320-8324.png"
+const Background={
+  backgroundImage: `url(${backgroundUrl})`,
+  backgroundSize: 'cover', 
+  backgroundPosition: 'center',
+  height: '100vh', 
+}
 
 const schema = z.object({
   userName: z
@@ -38,16 +47,19 @@ const Index: React.FC = () => {
     resolver: zodResolver(schema),
   });
 
-  const [postUserForLogin, { data: melumat, isLoading, isError }] =
+  const [postUserForLogin] =
     useLoginUserMutation();
-  console.log(melumat, isLoading, isError);
   const LoginUser = (data: IAuth) => {
-    console.log("login data", data);
     postUserForLogin(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(LoginUser)}>
+    <div className="d-flex justify-content-between">
+      <div className="col-md-6" style={Background}></div>
+      <div className="col-md-6 w-50 d-flex justify-content-center align-items-center flex-column" >
+      <h1 >Login Account</h1>
+      <p >Enter your email and password</p>
+      <form onSubmit={handleSubmit(LoginUser)} className="w-50 text-center d-flex flex-column gap-3">
       <Controller
         name="userName"
         control={control}
@@ -66,10 +78,13 @@ const Index: React.FC = () => {
       <RenderIf condition={errors.password?.message?.length}>
         <p>{errors.password?.message}</p>
       </RenderIf>
-      <Button type="primary" htmlType="submit">
+      <Button type="primary" htmlType="submit" style={{backgroundColor:"#222427"}}>
         Submit
       </Button>
     </form>
+      </div>
+    </div>
+    
   );
 };
 

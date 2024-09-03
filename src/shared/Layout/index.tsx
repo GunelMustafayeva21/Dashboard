@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Urls } from "@/shared/constants/Urls"
+import { Link } from "react-router-dom"
+
 import {
   MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  MenuUnfoldOutlined
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme, Typography } from 'antd';
+
+import { Button, Layout, theme, Typography } from 'antd';
 import { UseAppDispatch } from '@/redux/store';
 import { revertAll } from '@/redux/api/constants';
 
@@ -27,31 +29,20 @@ const Index: React.FC<IndexProps> = ({children}) => {
 
   const dispatch= UseAppDispatch()
   return (
-    <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed} style={{height:'100vh'}}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
-            },
-            {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
-        />
+    <Layout >
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{height:'100vh', marginLeft:'-20px', paddingRight:'10px'}} >
+       
+       
+        <ul style={{listStyleType:'none'}} className=' d-flex pt-4 flex-column gap-3'>
+        
+        <Link to={Urls.HOME} className='text-decoration-none btn btn-light'><li >    Home    </li></Link>
+        <Link to={Urls.ABOUT} className='text-decoration-none btn btn-light'><li>    About  </li></Link> 
+        <Link to={Urls.SERVICES} className='text-decoration-none btn btn-light'><li> Services </li></Link>
+        <Link to={Urls.PRODUCTS} className='text-decoration-none btn btn-light'><li> Products </li></Link>
+        
+        
+
+    </ul>
       </Sider>
       <Layout>
         <Header style={{ padding: '0 20px', background: colorBgContainer, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
@@ -66,7 +57,7 @@ const Index: React.FC<IndexProps> = ({children}) => {
             }}
           />
 
-          <button style={{ width: 64, height: 32,}} onClick={()=>dispatch(revertAll())}>Log out</button>
+          <button className='btn btn-dark' onClick={()=>dispatch(revertAll())}>Log out</button>
         </Header>
         <Content
           style={{

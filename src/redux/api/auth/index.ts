@@ -2,14 +2,14 @@ import { createApi} from "@reduxjs/toolkit/query/react";
 import { APIBaseQuery } from "../axiosBase";
 import { IAuth } from "./types";
 import { setToken, setUser } from "@/redux/feature/User/UserSlice";
-import { IToken } from "@/redux/feature/User/types";
+import { ILogin} from "@/redux/feature/User/types";
 
 
 export const authApi= createApi({
     reducerPath:'auth',
     baseQuery:APIBaseQuery,
     endpoints:(builder)=>({
-       loginUser: builder.mutation<IToken, IAuth>({
+       loginUser: builder.mutation<Pick<ILogin, "token" | "refreshToken" | "expiresAt">, IAuth>({
          query(data:IAuth){
             return {
                 url:'auth/admin/token',
